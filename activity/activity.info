@@ -1,0 +1,8 @@
+[Activity]
+name = Explorador AulaVirtual
+bundle_id = org.antipapel.aulavirtual.Explorer
+exec = sugar-activity activity.Explorer
+icon = activity-explorer
+activity_version = 1
+show_launcher = yes
+license = GPLv3+
