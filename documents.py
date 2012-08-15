@@ -55,7 +55,10 @@ class Documents(gtk.EventBox):
         self._sftp = sftp
         self._subject = subject
         self._documents = []
-
+        if not utils.get_documents(sftp, subject):
+            label = gtk.Label('<span font_desc="12"><i>%s</i></span>' % 'No hay documentos')
+            label.set_use_markup(True)
+            self._vbox.pack_start(label, False, True, 5)
         for document in utils.get_documents(sftp, subject):
             mimetype = utils.get_info(self._sftp, self._subject, document, only_mime=True)
             item = ListItem(document, mimetype)

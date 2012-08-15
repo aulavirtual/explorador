@@ -2,6 +2,7 @@ import gtk
 import sys
 import gobject
 import threading
+import utils
 
 from sugar.activity import activity
 from sugar.activity.widgets import ActivityButton
@@ -13,6 +14,8 @@ from sugar.graphics.alert import Alert
 
 from subjects import Subjects
 from documents import Documents
+
+GROUPS = ('1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B')
 
 
 class Explorer(activity.Activity):
@@ -61,13 +64,65 @@ class Explorer(activity.Activity):
         # Canvas
         self._canvas = gtk.EventBox()
         
-        self._loading_label = gtk.Label('<span font_desc="30"><i>%s</i></span>' % 'Cargando...')
-        self._loading_label.set_use_markup(True)
-        self._canvas.add(self._loading_label)
-
         self.set_canvas(self._canvas)
         self.show_all()
+        if not utils.get_group():
+		    self.choose_group()
+        else:
+		    self._do_canvas()
+
+    def choose_group(self):
+        vbox = gtk.VBox()
+        vbox.set_border_width(20)
+        
+        hbox = gtk.HBox()
+        vbox.pack_start(hbox, False, padding=10)
+        
+        label = gtk.Label("Nombre:         ")
+        hbox.pack_start(label, False, padding=10)
+        
+        entry = gtk.Entry()
+        hbox.pack_start(entry, False, padding=10)
+        
+        entry = gtk.Entry()
+        hbox.pack_end(entry, False, padding=10)
+        
+        label = gtk.Label("Apellido: ")
+        hbox.pack_end(label, False, padding=10)
+        
+        hbox2 = gtk.HBox()
+        vbox.pack_start(hbox2, False, padding=10)
+        
+        label_combo = gtk.Label("Elige tu grupo: ")
+        hbox2.pack_start(label_combo, True, False, padding=10)
+        
+        combo = gtk.ComboBox()
+        liststore = gtk.ListStore(str)
+        combo.set_model(liststore)
+        cell = gtk.CellRendererText()
+        combo.pack_start(cell, True)
+        combo.add_attribute(cell, 'text', 0)
+        hbox2.pack_start(combo, False, True, padding=10)
+        
+        for group in GROUPS:
+            liststore.append([group])
+            
+        accept = gtk.Button('Aceptar')
+        accept.connect('clicked', self._accept_clicked, combo, entry, vbox)
+        box = gtk.HBox()
+        box.pack_end(accept, False)
+        vbox.pack_start(box, False)
+        
+        self._canvas.add(vbox)
+        self.show_all()
+        
+    def _accept_clicked(self, widget, combo, entry, vbox):
+        group = GROUPS[combo.get_active()]
+        utils.GROUP = group
+        vbox.destroy()
+        print entry.get_text()
         self._do_canvas()
+        utils.save_me(self._subjects._sftp, group, entry.get_text())
         
     def _go_up_clicked(self, widget):
         self._notebook.set_current_page(0)
@@ -78,6 +133,7 @@ class Explorer(activity.Activity):
 
     def _do_canvas(self):
 		#try:
+
 		    scroll_documents = gtk.ScrolledWindow()
 		    scroll_documents.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 		    self._documents = Documents(self)
@@ -95,7 +151,6 @@ class Explorer(activity.Activity):
 		    self._notebook.append_page(scroll_documents)
 		    self._notebook.set_property("show-tabs", False)
 
-		    self._loading_label.destroy()
 		    self._canvas.add(self._notebook)
 		    self._canvas.show_all()
 
