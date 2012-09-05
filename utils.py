@@ -42,7 +42,7 @@ LOG = '/home/servidor/log.txt'
 SERIAL_NUM = '/proc/device-tree/serial-number'
 
 if not os.path.exists(SERIAL_NUM):
-     SERIAL_NUM = '/ofw/serial-number'
+    SERIAL_NUM = '/ofw/serial-number'
 
 
 def get_group():
@@ -121,7 +121,7 @@ def save_me(sftp, group, name):
         json.dump(machines, _file)
     finally:
         _file.close()
-        
+
     config_file = open('config', 'w')
     config_file.write(group)
     config_file.close()
@@ -136,4 +136,3 @@ def save_log(sftp, _log):
     log += "%f - %s - %s\n" % (time.time(), serial_number, _log)
     new_log.write(log)
     new_log.close()
-    

@@ -1,8 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# dialogs.py by:
+#    Agustin Zubiaga <aguz@sugarlabs.org>
+#    Cristhofer Travieso <cristhofert97@gmail.com>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 import gobject
 import gtk
-import pango
 from sugar.graphics import style
-from sugar.graphics.toolbutton import ToolButton	
+from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.icon import Icon
 from sugar import mime
 from sugar import profile
@@ -11,7 +31,7 @@ from sugar import profile
 class _DialogWindow(gtk.Window):
 
     # A base class for a modal dialog window.
-    def __init__(self, icon_name, title):	
+    def __init__(self, icon_name, title):
         super(_DialogWindow, self).__init__()
 
         self.set_border_width(style.LINE_WIDTH)
@@ -27,7 +47,7 @@ class _DialogWindow(gtk.Window):
         toolbar = _DialogToolbar(icon_name, title)
         toolbar.connect('stop-clicked', self._stop_clicked_cb)
         vbox.pack_start(toolbar, False)
-        
+
         eventbox = gtk.EventBox()
         eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
 
@@ -37,29 +57,32 @@ class _DialogWindow(gtk.Window):
         eventbox.show_all()
         vbox.add(eventbox)
         self.connect('realize', self._realize_cb)
-        
+
     def _stop_clicked_cb(self, source):
         self.destroy()
+
     def _realize_cb(self, source):
         self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.window.set_accept_focus(True)
-        
+
+
 class _DialogToolbar(gtk.Toolbar):
     # Displays a dialog window's toolbar, with title, icon, and close box.
     __gsignals__ = {
-        'stop-clicked': (gobject.SIGNAL_RUN_LAST, None, ()),	
+        'stop-clicked': (gobject.SIGNAL_RUN_LAST, None, ()),
     }
-    def __init__(self, icon_name, title):	
+
+    def __init__(self, icon_name, title):
         super(_DialogToolbar, self).__init__()
 
         if icon_name is not None:
             sep = gtk.SeparatorToolItem()
-            sep.set_draw(False)	
+            sep.set_draw(False)
             self._add_widget(sep)
             icon = Icon()
             icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR)
             self._add_widget(icon)
-            
+
         label = gtk.Label('  ' + title)
         self._add_widget(label)
         self._add_separator(expand=True)
@@ -83,28 +106,29 @@ class _DialogToolbar(gtk.Toolbar):
         self.emit('stop-clicked')
 
 
-class InfoDialog(_DialogWindow):	
+class InfoDialog(_DialogWindow):
     __gtype_name__ = 'InfoDialog'
     __gsignals__ = {"save-document": (gobject.SIGNAL_RUN_FIRST, None, ())}
-	
+
     def __init__(self, title, desc, teacher, subject, mimetype):
         super(InfoDialog, self).__init__("info",
                                             'Informacion del documento')
-       
+
         hbox = gtk.HBox()
         self.content_vbox.pack_start(hbox, True)
-        
-        previewbox = gtk.VBox() 
+
+        previewbox = gtk.VBox()
         preview = Icon(pixel_size=300)
         preview.props.icon_name = mime.get_mime_icon(mimetype)
         preview.props.xo_color = profile.get_color()
         previewbox.pack_start(preview, False)
         hbox.pack_start(previewbox, False, padding=5)
-        
+
         vbox = gtk.VBox()
         hbox.pack_end(vbox, True, padding=20)
-        
-        title_label = gtk.Label('<span font_desc="15"><b>%s</b></span>' % title)
+
+        title_label = gtk.Label(
+            '<span font_desc="15"><b>%s</b></span>' % title)
         title_label.set_use_markup(True)
         vbox.pack_start(title_label, False)
 
@@ -114,18 +138,17 @@ class InfoDialog(_DialogWindow):
         desc_label.set_line_wrap(True)
         desc_box.pack_start(desc_label, False, padding=30)
         vbox.pack_start(desc_box, True)
-        
+
         box = gtk.HBox()
         teacher_label = gtk.Label('%s - %s' % (teacher, subject))
         box.pack_start(teacher_label, False)
-        
+
         bbox = gtk.HBox()
         self.content_vbox.pack_end(bbox, False)
         self.content_vbox.pack_end(box, False)
-        
+
         btn_save = gtk.Button(stock=gtk.STOCK_SAVE)
         btn_save.connect('clicked', lambda w: self.emit('save-document'))
         bbox.pack_end(btn_save, False)
 
         self.show_all()
-        
