@@ -2,6 +2,7 @@ import gtk
 import sys
 import gobject
 import threading
+import pango
 import utils
 
 from sugar.activity import activity
@@ -75,26 +76,35 @@ class Explorer(activity.Activity):
         vbox = gtk.VBox()
         vbox.set_border_width(20)
         
+        title = gtk.Label('Registrate en Aula Virtual')
+        title.modify_font(pango.FontDescription('bold 25'))
+        vbox.pack_start(title, False, padding=40)
+        
         hbox = gtk.HBox()
         vbox.pack_start(hbox, False, padding=10)
         
-        label = gtk.Label("Nombre:         ")
+        label = gtk.Label("Nombre: ")
         hbox.pack_start(label, False, padding=10)
         
         entry = gtk.Entry()
-        hbox.pack_start(entry, False, padding=10)
+        hbox.pack_start(entry, True, padding=0)
+        
+        hbox1 = gtk.HBox()
+        hbox1.set_border_width(20)
+        
+        label = gtk.Label("Apellido:  ")
+        hbox1.pack_start(label, False, padding=0)
         
         entry = gtk.Entry()
-        hbox.pack_end(entry, False, padding=10)
+        hbox1.pack_start(entry, True, padding=0)
         
-        label = gtk.Label("Apellido: ")
-        hbox.pack_end(label, False, padding=10)
+        vbox.pack_start(hbox1, False, padding=10)
         
         hbox2 = gtk.HBox()
         vbox.pack_start(hbox2, False, padding=10)
         
         label_combo = gtk.Label("Elige tu grupo: ")
-        hbox2.pack_start(label_combo, True, False, padding=10)
+        hbox2.pack_start(label_combo, False, True, padding=10)
         
         combo = gtk.ComboBox()
         liststore = gtk.ListStore(str)
@@ -120,7 +130,6 @@ class Explorer(activity.Activity):
         group = GROUPS[combo.get_active()]
         utils.GROUP = group
         vbox.destroy()
-        print entry.get_text()
         self._do_canvas()
         utils.save_me(self._subjects._sftp, group, entry.get_text())
         
@@ -133,7 +142,6 @@ class Explorer(activity.Activity):
 
     def _do_canvas(self):
 		#try:
-
 		    scroll_documents = gtk.ScrolledWindow()
 		    scroll_documents.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 		    self._documents = Documents(self)
