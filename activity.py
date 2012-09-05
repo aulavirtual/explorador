@@ -64,6 +64,8 @@ class Explorer(activity.Activity):
 
         # Canvas
         self._canvas = gtk.EventBox()
+        self._name = ''
+        self._last_name = ''
         
         self.set_canvas(self._canvas)
         self.show_all()
@@ -72,6 +74,12 @@ class Explorer(activity.Activity):
         else:
 		    self._do_canvas()
 
+    def _set_text(self, widget, name=True):
+        if name:
+            self._name = widget.get_text()
+        else:
+            self._last_name = widget.get_text()
+            
     def choose_group(self):
         vbox = gtk.VBox()
         vbox.set_border_width(20)
@@ -87,6 +95,7 @@ class Explorer(activity.Activity):
         hbox.pack_start(label, False, padding=10)
         
         entry = gtk.Entry()
+        entry.connect('changed', self._set_text)
         hbox.pack_start(entry, True, padding=0)
         
         hbox1 = gtk.HBox()
@@ -96,6 +105,7 @@ class Explorer(activity.Activity):
         hbox1.pack_start(label, False, padding=0)
         
         entry = gtk.Entry()
+        entry.connect('changed', self._set_text, False)
         hbox1.pack_start(entry, True, padding=0)
         
         vbox.pack_start(hbox1, False, padding=10)
@@ -131,7 +141,7 @@ class Explorer(activity.Activity):
         utils.GROUP = group
         vbox.destroy()
         self._do_canvas()
-        utils.save_me(self._subjects._sftp, group, entry.get_text())
+        utils.save_me(self._subjects._sftp, group, '%s %s' % (self._name, self._last_name))
         
     def _go_up_clicked(self, widget):
         self._notebook.set_current_page(0)
