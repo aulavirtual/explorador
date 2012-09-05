@@ -39,6 +39,10 @@ PASSWORD = 'grupos'
 GROUPS_DIR = "Groups"
 MACHINES = '/home/servidor/serial_numbers.txt'
 LOG = '/home/servidor/log.txt'
+SERIAL_NUM = '/proc/device-tree/serial-number'
+
+if not os.path.exists(SERIAL_NUM):
+     SERIAL_NUM = '/ofw/serial-number'
 
 
 def get_group():
@@ -108,7 +112,7 @@ def save_me(sftp, group, name):
     machines = json.load(_file)
     _file.close()
 
-    _file = open('/proc/device-tree/serial-number')
+    _file = open(SERIAL_NUM)
     serial_number = _file.read()[:-1]
     machines[serial_number] = (name, group)
 
@@ -126,7 +130,7 @@ def save_me(sftp, group, name):
 def save_log(sftp, _log):
     log = sftp.open(LOG, 'r').read()
 
-    _file = open('/proc/device-tree/serial-number')
+    _file = open(SERIAL_NUM)
     serial_number = _file.read()[:-1]
     new_log = sftp.open(LOG, 'w')
     log += "%f - %s - %s\n" % (time.time(), serial_number, _log)

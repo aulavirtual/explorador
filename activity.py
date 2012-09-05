@@ -88,6 +88,11 @@ class Explorer(activity.Activity):
         title.modify_font(pango.FontDescription('bold 25'))
         vbox.pack_start(title, False, padding=40)
         
+        note = gtk.Label('<span foreground="#FF0000"><i>\
+                       * Por favor ingresa los datos correctamente.</i></span>')
+        note.set_use_markup(True)
+        vbox.pack_start(note, False, True, padding=5)
+        
         hbox = gtk.HBox()
         vbox.pack_start(hbox, False, padding=10)
         
@@ -126,6 +131,7 @@ class Explorer(activity.Activity):
         
         for group in GROUPS:
             liststore.append([group])
+        combo.set_active(0)
             
         accept = gtk.Button('Aceptar')
         accept.connect('clicked', self._accept_clicked, combo, entry, vbox)
