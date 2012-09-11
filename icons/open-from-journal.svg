@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   enable-background="new 0 0 55 55"
+   height="55px"
+   id="Layer_1"
+   version="1.1"
+   viewBox="0 0 55 55"
+   width="55px"
+   x="0px"
+   xml:space="preserve"
+   y="0px"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="open-from-journal.svg"><metadata
+   id="metadata36"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs34" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="640"
+   inkscape:window-height="480"
+   id="namedview32"
+   showgrid="false"
+   inkscape:zoom="4.2909091"
+   inkscape:cx="27.5"
+   inkscape:cy="42.782185"
+   inkscape:window-x="0"
+   inkscape:window-y="26"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="g4" />
+<g
+   display="block"
+   id="document-save">
+	<g
+   id="g4">
+		<g
+   id="g6">
+			<g
+   id="g8">
+				<path
+   d="M6.736,49.002      h24.52c2.225,0,3.439-1.447,3.439-3.441V18.281c0-1.73-1.732-3.441-3.439-3.441h-4.389"
+   id="path10"
+   stroke-linejoin="round"
+   stroke-linecap="round"
+   stroke-width="3.5"
+   stroke="#010101"
+   fill="#FFFFFF" />
+			</g>
+		</g>
+		<g
+   id="g12">
+			<g
+   id="g14">
+				<path
+   d="M26.867,38.592      c0,1.836-1.345,3.201-3.441,4.047l-16.69,6.363V14.84l16.69-8.599c2.228-0.394,3.441,0.84,3.441,2.834V38.592z"
+   fill="#FFFFFF"
+   stroke="#010101"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="3.5"
+   id="path16" />
+			</g>
+		</g>
+		<path
+   d="M9.424,42.607    c0,0-1.351-0.543-2.702-0.543s-2.703,0.543-2.703,0.543"
+   fill="none"
+   stroke="#010101"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="2.25"
+   id="path18" />
+		<path
+   d="M9.424,32.006    c0,0-1.239-0.543-2.815-0.543c-1.577,0-2.59,0.543-2.59,0.543"
+   fill="none"
+   stroke="#010101"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="2.25"
+   id="path20" />
+		<path
+   d="M9.424,21.678    c0,0-1.125-0.544-2.927-0.544c-1.802,0-2.478,0.544-2.478,0.544"
+   fill="none"
+   stroke="#010101"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="2.25"
+   id="path22" />
+		
+		<line
+   fill="none"
+   stroke="#010101"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="2.25"
+   x1="13.209"
+   x2="13.209"
+   y1="46.533"
+   y2="11.505"
+   id="line24" />
+		
+		<g
+   id="g26"
+   transform="matrix(-0.9995945,-0.02847492,0.02847492,-0.9995945,93.291195,22.433532)">
+			<line
+   x1="41.169998"
+   x2="52.441002"
+   y1="16.188"
+   y2="4.9169998"
+   id="line28"
+   style="fill:none;stroke:#ffffff;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round" />
+			<polyline
+   points="     51.562,15.306 41.17,16.188 42.053,5.794    "
+   id="polyline30"
+   style="fill:none;stroke:#ffffff;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round" />
+		</g>
+	</g>
+</g>
+</svg>

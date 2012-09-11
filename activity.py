@@ -28,6 +28,7 @@ from sugar.activity.widgets import ActivityButton
 from sugar.activity.widgets import StopButton
 from sugar.graphics.toolbarbox import ToolbarBox
 from sugar.graphics.toolbutton import ToolButton
+from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.alert import Alert
 
 from subjects import Subjects
@@ -50,6 +51,11 @@ class Explorer(activity.Activity):
         separator = gtk.SeparatorToolItem()
         toolbarbox.toolbar.insert(separator, -1)
 
+        explorer_btn = RadioToolButton()
+        explorer_btn.set_tooltip('Explorador')
+        explorer_btn.props.icon_name = 'activity-explorer'
+        toolbarbox.toolbar.insert(explorer_btn, -1)
+
         self._goup = ToolButton('to-subjects')
         self._goup.connect('clicked', self._go_up_clicked)
         self._goup.set_tooltip('Ver Materias')
@@ -68,6 +74,27 @@ class Explorer(activity.Activity):
         self._download.set_sensitive(False)
         toolbarbox.toolbar.insert(self._download, -1)
 
+        separator = gtk.SeparatorToolItem()
+        toolbarbox.toolbar.insert(separator, -1)
+
+        homework_btn = RadioToolButton()
+        homework_btn.set_tooltip('Tareas Domisiliarias')
+        homework_btn.props.icon_name = 'homework'
+        homework_btn.props.group = explorer_btn
+        toolbarbox.toolbar.insert(homework_btn, -1)
+        
+        open_btn = ToolButton()
+        open_btn.set_tooltip('Abrir desde el diario')
+        open_btn.props.icon_name = 'open-from-journal'
+        open_btn.set_sensitive(False)
+        toolbarbox.toolbar.insert(open_btn, -1)
+
+        send = ToolButton()
+        send.set_tooltip('Abrir desde el diario')
+        send.props.icon_name = 'document-send'
+        send.set_sensitive(False)
+        toolbarbox.toolbar.insert(send, -1)
+        
         separator = gtk.SeparatorToolItem()
         separator.set_expand(True)
         separator.set_draw(False)
