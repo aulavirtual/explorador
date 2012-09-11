@@ -22,6 +22,7 @@
 import gtk
 import pango
 import utils
+import widgets
 
 from sugar.activity import activity
 from sugar.activity.widgets import ActivityButton
@@ -82,11 +83,13 @@ class Explorer(activity.Activity):
         homework_btn.props.icon_name = 'homework'
         homework_btn.props.group = explorer_btn
         toolbarbox.toolbar.insert(homework_btn, -1)
-        
+
         open_btn = ToolButton()
         open_btn.set_tooltip('Abrir desde el diario')
         open_btn.props.icon_name = 'open-from-journal'
         open_btn.set_sensitive(False)
+        open_btn.connect("clicked",
+                         file_choosers.open_from_journal, None, self)
         toolbarbox.toolbar.insert(open_btn, -1)
 
         send = ToolButton()
@@ -94,7 +97,7 @@ class Explorer(activity.Activity):
         send.props.icon_name = 'document-send'
         send.set_sensitive(False)
         toolbarbox.toolbar.insert(send, -1)
-        
+
         separator = gtk.SeparatorToolItem()
         separator.set_expand(True)
         separator.set_draw(False)
@@ -118,11 +121,34 @@ class Explorer(activity.Activity):
         else:
             self._do_canvas()
 
+    def _copy_from_journal(self):
+
     def _set_text(self, widget, name=True):
         if name:
             self._name = widget.get_text()
         else:
             self._last_name = widget.get_text()
+
+    def _homework(self):
+        scroll_homework = gtk.ScrolledWindow()
+
+        main_container = gtk.VBox()
+        scroll_homework.add(main_container)
+
+        self._title = widgets.Entry('Escriba el titulo aqui')
+        main_container.pack_start(self._title, True, True, 0)
+
+        label = gtk.Label('Comentarios:')
+        main_container.pack_start(label, False, True, 10)
+
+        self._description = gtk.TextView()
+        self._description.set_property('wrap-mode', gtk.WRAP_WORD)
+        main_container.pack_start(self._description, True, True, 5)
+
+        self._subjects_selector = widgets.GroupChooser()
+        main_container.pack_start(self._subject_selector, False, True, 0)
+
+        return scroll_homework
 
     def choose_group(self):
         vbox = gtk.VBox()
@@ -219,6 +245,7 @@ class Explorer(activity.Activity):
 
         self._notebook.append_page(scroll_subjects)
         self._notebook.append_page(scroll_documents)
+        self._notebook.append_page(self._homework())
         self._notebook.set_property("show-tabs", False)
 
         self._canvas.add(self._notebook)
