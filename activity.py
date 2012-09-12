@@ -122,6 +122,7 @@ class Explorer(activity.Activity):
             self._do_canvas()
 
     def _copy_from_journal(self):
+        return
 
     def _set_text(self, widget, name=True):
         if name:
@@ -129,11 +130,8 @@ class Explorer(activity.Activity):
         else:
             self._last_name = widget.get_text()
 
-    def _homework(self):
-        scroll_homework = gtk.ScrolledWindow()
-
+    def _do_homework_canvas(self):
         main_container = gtk.VBox()
-        scroll_homework.add(main_container)
 
         self._title = widgets.Entry('Escriba el titulo aqui')
         main_container.pack_start(self._title, True, True, 0)
@@ -142,13 +140,13 @@ class Explorer(activity.Activity):
         main_container.pack_start(label, False, True, 10)
 
         self._description = gtk.TextView()
-        self._description.set_property('wrap-mode', gtk.WRAP_WORD)
+        self._description.set_property('wrap-mode', gtk.WRAP_WORD_CHAR)
         main_container.pack_start(self._description, True, True, 5)
 
-        self._subjects_selector = widgets.GroupChooser()
+        self._subjects_selector = widgets.SubjectChooser()
         main_container.pack_start(self._subject_selector, False, True, 0)
 
-        return scroll_homework
+        return main_container
 
     def choose_group(self):
         vbox = gtk.VBox()
@@ -245,7 +243,7 @@ class Explorer(activity.Activity):
 
         self._notebook.append_page(scroll_subjects)
         self._notebook.append_page(scroll_documents)
-        self._notebook.append_page(self._homework())
+        self._notebook.append_page(self._do_homework_canvas())
         self._notebook.set_property("show-tabs", False)
 
         self._canvas.add(self._notebook)
