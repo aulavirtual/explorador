@@ -83,6 +83,7 @@ class Explorer(activity.Activity):
         homework_btn.set_tooltip('Tareas Domiciliarias')
         homework_btn.props.icon_name = 'homework'
         homework_btn.props.group = explorer_btn
+
         toolbarbox.toolbar.insert(homework_btn, -1)
 
         open_btn = ToolButton()
@@ -98,6 +99,9 @@ class Explorer(activity.Activity):
         send.props.icon_name = 'document-send'
         send.set_sensitive(False)
         toolbarbox.toolbar.insert(send, -1)
+        
+        homework_btn.connect('clicked', self.homework_btn_cb, open_btn, send)
+        explorer_btn.connect('clicked', self.explorer_btn_cb, open_btn, send)
 
         separator = gtk.SeparatorToolItem()
         separator.set_expand(True)
@@ -125,6 +129,19 @@ class Explorer(activity.Activity):
         else:
             self._do_canvas()
 
+    def homework_btn_cb(self, button, open_btn, send):
+        self._notebook.set_current_page(-1)
+        self._goup.set_sensitive(False)
+        self._select_all.set_sensitive(False)
+        self._download.set_sensitive(False)
+        open_btn.set_sensitive(True)
+        send.set_sensitive(True)
+
+    def explorer_btn_cb(self, widget, open_btn, send):
+        self._notebook.set_current_page(0)
+        open_btn.set_sensitive(False)
+        send.set_sensitive(False)
+        
     def _select_hw_from_journal(self):
         chooser = ObjectChooser()
         response = chooser.run()
@@ -148,7 +165,7 @@ class Explorer(activity.Activity):
         main_container = gtk.VBox()
 
         self._hw_title = widgets.Entry('Escriba el titulo aqui')
-        main_container.pack_start(self._hw_title, True, True, 0)
+        main_container.pack_start(self._hw_title, False, True, 0)
 
         label = gtk.Label('Comentarios:')
         main_container.pack_start(label, False, True, 10)
@@ -157,8 +174,10 @@ class Explorer(activity.Activity):
         self._hw_description.set_property('wrap-mode', gtk.WRAP_WORD_CHAR)
         main_container.pack_start(self._hw_description, True, True, 5)
 
+        hbox = gtk.HBox()
+        main_container.pack_start(hbox, False, True)
         self._subjects_selector = widgets.SubjectChooser()
-        main_container.pack_start(self._subjects_selector, False, True, 0)
+        hbox.pack_start(self._subjects_selector, False, True, 0)
 
         return main_container
 
