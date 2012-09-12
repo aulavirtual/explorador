@@ -31,6 +31,7 @@ from sugar.graphics.toolbarbox import ToolbarBox
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.alert import Alert
+from sugar.graphics.objectchooser import ObjectChooser
 
 from subjects import Subjects
 from documents import Documents
@@ -85,15 +86,15 @@ class Explorer(activity.Activity):
         toolbarbox.toolbar.insert(homework_btn, -1)
 
         open_btn = ToolButton()
-        open_btn.set_tooltip('Abrir desde el diario')
+        open_btn.set_tooltip('Seleccionar tarea')
         open_btn.props.icon_name = 'open-from-journal'
         open_btn.set_sensitive(False)
-        open_btn.connect("clicked",
-                         file_choosers.open_from_journal, None, self)
+        open_btn.connect("clicked", self._select_hw_from_journal)
         toolbarbox.toolbar.insert(open_btn, -1)
 
         send = ToolButton()
-        send.set_tooltip('Abrir desde el diario')
+        send.set_tooltip('Enviar tarea')
+        send.connect('clicked', self._send_hw_to_server)
         send.props.icon_name = 'document-send'
         send.set_sensitive(False)
         toolbarbox.toolbar.insert(send, -1)
@@ -113,6 +114,9 @@ class Explorer(activity.Activity):
         self._canvas = gtk.EventBox()
         self._name = ''
         self._last_name = ''
+        self._hw_title = ''
+        self._hw_description = ''
+        self._hw_path = ''
 
         self.set_canvas(self._canvas)
         self.show_all()
@@ -121,7 +125,17 @@ class Explorer(activity.Activity):
         else:
             self._do_canvas()
 
-    def _copy_from_journal(self):
+    def _select_hw_from_journal(self):
+        chooser = ObjectChooser()
+        response = chooser.run()
+
+        if response == gtk.RESPONSE_ACCEPT:
+            jobject = chooser.get_selected_object()
+            self._hw_path = str(jobject.get_file_path())
+            self._notebook.set_current_page(2)
+
+    def _send_hw_to_server(self, widget):
+        #TODO: Send the homework to the server
         return
 
     def _set_text(self, widget, name=True):
@@ -133,15 +147,15 @@ class Explorer(activity.Activity):
     def _do_homework_canvas(self):
         main_container = gtk.VBox()
 
-        self._title = widgets.Entry('Escriba el titulo aqui')
-        main_container.pack_start(self._title, True, True, 0)
+        self._hw_title = widgets.Entry('Escriba el titulo aqui')
+        main_container.pack_start(self._hw_title, True, True, 0)
 
         label = gtk.Label('Comentarios:')
         main_container.pack_start(label, False, True, 10)
 
-        self._description = gtk.TextView()
-        self._description.set_property('wrap-mode', gtk.WRAP_WORD_CHAR)
-        main_container.pack_start(self._description, True, True, 5)
+        self._hw_description = gtk.TextView()
+        self._hw_description.set_property('wrap-mode', gtk.WRAP_WORD_CHAR)
+        main_container.pack_start(self._hw_description, True, True, 5)
 
         self._subjects_selector = widgets.SubjectChooser()
         main_container.pack_start(self._subject_selector, False, True, 0)
