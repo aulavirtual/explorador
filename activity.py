@@ -80,7 +80,7 @@ class Explorer(activity.Activity):
         toolbarbox.toolbar.insert(separator, -1)
 
         homework_btn = RadioToolButton()
-        homework_btn.set_tooltip('Tareas Domisiliarias')
+        homework_btn.set_tooltip('Tareas Domiciliarias')
         homework_btn.props.icon_name = 'homework'
         homework_btn.props.group = explorer_btn
         toolbarbox.toolbar.insert(homework_btn, -1)
@@ -158,7 +158,7 @@ class Explorer(activity.Activity):
         main_container.pack_start(self._hw_description, True, True, 5)
 
         self._subjects_selector = widgets.SubjectChooser()
-        main_container.pack_start(self._subject_selector, False, True, 0)
+        main_container.pack_start(self._subjects_selector, False, True, 0)
 
         return main_container
 
