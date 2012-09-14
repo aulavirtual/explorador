@@ -23,6 +23,7 @@ import gtk
 import pango
 import utils
 import widgets
+import documents
 
 from sugar.activity import activity
 from sugar.activity.widgets import ActivityButton
@@ -93,15 +94,15 @@ class Explorer(activity.Activity):
         open_btn.connect("clicked", self._select_hw_from_journal)
         toolbarbox.toolbar.insert(open_btn, -1)
 
-        send = ToolButton()
-        send.set_tooltip('Enviar tarea')
-        send.connect('clicked', self._send_hw_to_server)
-        send.props.icon_name = 'document-send'
-        send.set_sensitive(False)
-        toolbarbox.toolbar.insert(send, -1)
+        self._send = ToolButton()
+        self._send.set_tooltip('Enviar tarea')
+        self._send.connect('clicked', self._send_hw_to_server)
+        self._send.props.icon_name = 'document-send'
+        self._send.set_sensitive(False)
+        toolbarbox.toolbar.insert(self._send, -1)
 
-        homework_btn.connect('clicked', self.homework_btn_cb, open_btn, send)
-        explorer_btn.connect('clicked', self.explorer_btn_cb, open_btn, send)
+        homework_btn.connect('clicked', self.homework_btn_cb, open_btn)
+        explorer_btn.connect('clicked', self.explorer_btn_cb, open_btn)
 
         separator = gtk.SeparatorToolItem()
         separator.set_expand(True)
@@ -129,20 +130,20 @@ class Explorer(activity.Activity):
         else:
             self._do_canvas()
 
-    def homework_btn_cb(self, button, open_btn, send):
+    def homework_btn_cb(self, button, open_btn):
         self._notebook.set_current_page(2)
         self._goup.set_sensitive(False)
         self._select_all.set_sensitive(False)
         self._download.set_sensitive(False)
         open_btn.set_sensitive(True)
-        send.set_sensitive(True)
+        self._send.set_sensitive(False)
 
-    def explorer_btn_cb(self, widget, open_btn, send):
+    def explorer_btn_cb(self, widget, open_btn):
         self._notebook.set_current_page(0)
         open_btn.set_sensitive(False)
-        send.set_sensitive(False)
+        self._send.set_sensitive(False)
 
-    def _select_hw_from_journal(self):
+    def _select_hw_from_journal(self, widget):
         chooser = ObjectChooser()
         response = chooser.run()
 
@@ -150,9 +151,10 @@ class Explorer(activity.Activity):
             jobject = chooser.get_selected_object()
             self._hw_path = str(jobject.get_file_path())
             self._notebook.set_current_page(-1)
+            self._send.set_sensitive(True)
 
     def _send_hw_to_server(self, widget):
-        #TODO: Send the homework to the server
+        #TODO: self._send the homework to the server
         return
 
     def _set_text(self, widget, name=True):
@@ -276,6 +278,7 @@ class Explorer(activity.Activity):
 
         self._notebook.append_page(scroll_subjects)
         self._notebook.append_page(scroll_documents)
+        self._notebook.append_page(documents.HomeWorks())
         self._notebook.append_page(self._do_homework_canvas())
         self._notebook.set_property("show-tabs", False)
 

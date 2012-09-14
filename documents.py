@@ -22,6 +22,7 @@
 import gtk
 import gobject
 
+import widgets
 import utils
 from dialogs import InfoDialog
 from sugar.graphics import style
@@ -138,27 +139,18 @@ class HomeWorks(gtk.EventBox):
 
         self.modify_bg(gtk.STATE_NORMAL, style.COLOR_WHITE.get_gdk_color())
 
+        mainbox = gtk.VBox()
+        self.add(mainbox)
         self._vbox = gtk.VBox()
-        self.add(self._vbox)
+        mainbox.add(self._vbox)
+        hbox = gtk.HBox()
+        mainbox.pack_start(hbox, False, True, 0)
+        _subjects_selector = widgets.SubjectChooser()
+        hbox.pack_start(_subjects_selector, False, False, 0)
 
         self.show_all()
 
-    def select_all(self, *kwargs):
-        for widget in self._vbox.get_children():
-            if not self._all_selected:
-                widget.select()
-            else:
-                widget.unselect()
-
-        self._all_selected = not self._all_selected
-
-    def _go_up_clicked(self, widget):
-        self._all_selected = False
-        self._activity._select_all.set_sensitive(False)
-        self._activity._download.set_sensitive(False)
-
     def clear(self):
-        self._selection = []
         for widget in self._vbox.get_children():
             self._vbox.remove(widget)
             widget.destroy()
@@ -195,6 +187,7 @@ class HomeWorks(gtk.EventBox):
 #        dialog.connect('save-document', lambda w: utils.save_document(
 #                self._sftp, self._subject, widget.title, mimetype))
 #
+
 
 class ListItem(gtk.HBox):
     __gsignals__ = {"show-info": (gobject.SIGNAL_RUN_FIRST, None, ()),
