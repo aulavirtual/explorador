@@ -39,6 +39,7 @@ PASSWORD = 'grupos'
 GROUPS_DIR = "Groups"
 MACHINES = '/home/servidor/serial_numbers.txt'
 LOG = '/home/servidor/log.txt'
+HOMEWORKS_DIR = '.homeworks'
 SERIAL_NUM = '/proc/device-tree/serial-number'
 
 if not os.path.exists(SERIAL_NUM):
@@ -104,7 +105,7 @@ def get_info(sftp, subject, document, only_mime=False):
 
 
 def is_downloaded(sftp, subject, document):
-    pass
+    raise NotImplementedError
 
 
 def save_me(sftp, group, name):
@@ -136,3 +137,15 @@ def save_log(sftp, _log):
     log += "%f - %s - %s\n" % (time.time(), serial_number, _log)
     new_log.write(log)
     new_log.close()
+
+
+def get_homeworks(sftp, subject):
+    sftp.chdir(os.path.join(GROUPS_DIR, GROUP, subject, HOMEWORKS_DIR))
+    _desc = sftp.open('.desc', 'r')
+    desc = json.load(_desc)
+    _desc.close()
+    homeworks = {}
+    for hw in sftp.listdir('.'):
+        if not hw.startswith('.'):
+            homeworks[hw] = desc[hw]
+    return homeworks

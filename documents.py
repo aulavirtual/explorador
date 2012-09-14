@@ -131,29 +131,98 @@ class Documents(gtk.EventBox):
         self._alert = None
 
 
+class HomeWorks(gtk.EventBox):
+
+    def __init__(self):
+        gtk.EventBox.__init__(self)
+
+        self.modify_bg(gtk.STATE_NORMAL, style.COLOR_WHITE.get_gdk_color())
+
+        self._vbox = gtk.VBox()
+        self.add(self._vbox)
+
+        self.show_all()
+
+    def select_all(self, *kwargs):
+        for widget in self._vbox.get_children():
+            if not self._all_selected:
+                widget.select()
+            else:
+                widget.unselect()
+
+        self._all_selected = not self._all_selected
+
+    def _go_up_clicked(self, widget):
+        self._all_selected = False
+        self._activity._select_all.set_sensitive(False)
+        self._activity._download.set_sensitive(False)
+
+    def clear(self):
+        self._selection = []
+        for widget in self._vbox.get_children():
+            self._vbox.remove(widget)
+            widget.destroy()
+
+    def refresh(self, subject):
+        self.clear()
+        if not utils.get_homeworks(self.sftp, subject):
+            label = gtk.Label(
+                '<span font_desc="12"><i>%s</i></span>' %
+                'No hay tareas domiciliarias')
+            label.set_use_markup(True)
+            self._vbox.pack_start(label, False, True, 5)
+        self._hwlist = utils.get_homeworks(self.sftp, subject)
+        keys = self._hwlist.keys()
+        keys.sort()
+        for hw in keys:
+            date, comments, evaluation, student, mimetype = self._hwlist[hw]
+            evaluation = evaluation.split('|')[0]
+            item = ListItem(hw, mimetype, 'Evaluación: %s' % evaluation)
+            item.connect("show-info", self._show_info)
+            self._vbox.pack_start(item, False, True, 5)
+            item.show()
+        self._activity.show_all()
+
+    def _show_info(self, widget):
+        #TODO: Create a new dialog type
+        return
+#        desc, teacher, mimetype =\
+#          utils.get_info(self._sftp,
+#                         self._subject, widget.title)
+#
+#        dialog = InfoDialog(widget.title, desc, teacher,
+#                            self._subject, mimetype)
+#        dialog.connect('save-document', lambda w: utils.save_document(
+#                self._sftp, self._subject, widget.title, mimetype))
+#
+
 class ListItem(gtk.HBox):
     __gsignals__ = {"show-info": (gobject.SIGNAL_RUN_FIRST, None, ()),
                     'selected': (gobject.SIGNAL_RUN_FIRST, None, ()),
                     'unselected': (gobject.SIGNAL_RUN_FIRST, None, ())}
 
-    def __init__(self, title, mimetype):
+    def __init__(self, title, mimetype, evaluation='', can_check=True):
         gtk.HBox.__init__(self)
 
-        self._checkbutton = gtk.CheckButton()
-        self._checkbutton.connect('toggled', self._toggled)
+        if can_check:
+            self._checkbutton = gtk.CheckButton()
+            self._checkbutton.connect('toggled', self._toggled)
         label = gtk.Label("<b>%s</b>" % (title))
         label.set_use_markup(True)
         icon = Icon(pixel_size=52)
         icon.props.icon_name = mime.get_mime_icon(mimetype)
         icon.props.xo_color = profile.get_color()
+        evaluation = gtk.Label(evaluation)
         button = gtk.ToolButton()
         button.connect('clicked', lambda w: self.emit('show-info'))
         icon_info = Icon(pixel_size=24)
         icon_info.props.icon_name = 'info-small'
         button.set_icon_widget(icon_info)
-        self.pack_start(self._checkbutton, False, True, 5)
+        if can_check:
+            self.pack_start(self._checkbutton, False, True, 5)
         self.pack_start(icon, False, True, 5)
         self.pack_start(label, False, True, 5)
+        self.pack_end(evaluation, False, True, 5)
         self.pack_end(button, False, True, 5)
         self.title = title
         self.mimetype = mimetype

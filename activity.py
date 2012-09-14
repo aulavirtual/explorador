@@ -99,7 +99,7 @@ class Explorer(activity.Activity):
         send.props.icon_name = 'document-send'
         send.set_sensitive(False)
         toolbarbox.toolbar.insert(send, -1)
-        
+
         homework_btn.connect('clicked', self.homework_btn_cb, open_btn, send)
         explorer_btn.connect('clicked', self.explorer_btn_cb, open_btn, send)
 
@@ -130,7 +130,7 @@ class Explorer(activity.Activity):
             self._do_canvas()
 
     def homework_btn_cb(self, button, open_btn, send):
-        self._notebook.set_current_page(-1)
+        self._notebook.set_current_page(2)
         self._goup.set_sensitive(False)
         self._select_all.set_sensitive(False)
         self._download.set_sensitive(False)
@@ -141,7 +141,7 @@ class Explorer(activity.Activity):
         self._notebook.set_current_page(0)
         open_btn.set_sensitive(False)
         send.set_sensitive(False)
-        
+
     def _select_hw_from_journal(self):
         chooser = ObjectChooser()
         response = chooser.run()
@@ -149,7 +149,7 @@ class Explorer(activity.Activity):
         if response == gtk.RESPONSE_ACCEPT:
             jobject = chooser.get_selected_object()
             self._hw_path = str(jobject.get_file_path())
-            self._notebook.set_current_page(2)
+            self._notebook.set_current_page(-1)
 
     def _send_hw_to_server(self, widget):
         #TODO: Send the homework to the server
