@@ -278,7 +278,7 @@ class Explorer(activity.Activity):
 
         self._notebook.append_page(scroll_subjects)
         self._notebook.append_page(scroll_documents)
-        self._notebook.append_page(documents.HomeWorks())
+        self._notebook.append_page(documents.HomeWorks(self._subjects._sftp))
         self._notebook.append_page(self._do_homework_canvas())
         self._notebook.set_property("show-tabs", False)
 

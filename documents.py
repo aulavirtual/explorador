@@ -134,10 +134,11 @@ class Documents(gtk.EventBox):
 
 class HomeWorks(gtk.EventBox):
 
-    def __init__(self):
+    def __init__(self, sftp):
         gtk.EventBox.__init__(self)
 
         self.modify_bg(gtk.STATE_NORMAL, style.COLOR_WHITE.get_gdk_color())
+        self.sftp = sftp
 
         mainbox = gtk.VBox()
         self.add(mainbox)
@@ -148,7 +149,13 @@ class HomeWorks(gtk.EventBox):
         _subjects_selector = widgets.SubjectChooser()
         hbox.pack_start(_subjects_selector, False, False, 0)
 
+        _subjects_selector.connect('changed', self._select_subject)
+        _subjects_selector.set_active(0)
+
         self.show_all()
+
+    def _select_subject(self, widget):
+        self.refresh(widget.get_active_text())
 
     def clear(self):
         for widget in self._vbox.get_children():
@@ -173,6 +180,8 @@ class HomeWorks(gtk.EventBox):
             item.connect("show-info", self._show_info)
             self._vbox.pack_start(item, False, True, 5)
             item.show()
+            print hw, self._hwlist[hw]
+        self.show_all()
         self._activity.show_all()
 
     def _show_info(self, widget):
