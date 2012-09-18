@@ -152,10 +152,24 @@ class Explorer(activity.Activity):
             self._hw_path = str(jobject.get_file_path())
             self._notebook.set_current_page(-1)
             self._send.set_sensitive(True)
+            self._hw_title.set_text(jobject.get_metadata()["title"])
+            self._hw_mime_type = jobject.get_metadata()["mime type"]
 
     def _send_hw_to_server(self, widget):
         #TODO: self._send the homework to the server
-        return
+        _buffer = self._hw_description.get_buffer()
+        start = _buffer.get_start_iter()
+        end = _buffer.get_end_iter()
+        comments = _buffer.get_text(start, end)
+
+        utils.send_homework(self._subjects._sftp, 
+                                           self._subjects_selector.\
+                                           get_active_text(),
+                                           self._hw_path,
+                                           self._hw_title.get_text(), 
+                                           comments,  self._hw_mime_type)
+
+        self._notebook.set_current_page(2)
 
     def _set_text(self, widget, name=True):
         if name:
