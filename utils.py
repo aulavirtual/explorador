@@ -27,6 +27,7 @@ sys.path.insert(0, 'lib')
 import paramiko
 import json
 import time
+import datetime
 
 from sugar import profile
 from sugar.activity import activity
@@ -149,3 +150,25 @@ def get_homeworks(sftp, subject):
         if not hw.startswith('.'):
             homeworks[hw] = desc[hw]
     return homeworks
+
+
+def send_homework(sftp, subject, file_path, name, comments, mimetype):
+    remote_path = os.path.join(GROUPS_DIR, GROUP, subject, HOMEWORKS_DIR, name)
+    sftp.put(file_path, remote_path)
+    _file = sftp.open(os.path.join(subject, ".desc"))
+    desc = json.load(_file)
+    _file.close()
+
+    _file = sftp.open(MACHINES, 'r')
+    machines = json.load(_file)
+    _file.close()
+
+    _file = open(SERIAL_NUM)
+    serial_number = _file.read()[:-1]
+    myname = machines[serial_number][0]
+
+    date = str(datetime.date.today()).replace('-', '/')
+    desc[name] = (date, comments, '', myname, mimetype, file_path.split('.')[0])
+    _file = sftp.open(MACHINES, 'w')
+    json.load(desc, _file)
+    _file.close()
