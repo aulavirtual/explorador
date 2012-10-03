@@ -37,7 +37,7 @@ MYFILES = os.path.join(activity.get_activity_root(), 'data')
 SERVER = '192.168.1.100'
 USERNAME = 'servidor'
 PASSWORD = 'grupos'
-GROUPS_DIR = "Groups"
+GROUPS_DIR = "/home/servidor/Groups"
 MACHINES = '/home/servidor/serial_numbers.txt'
 LOG = '/home/servidor/log.txt'
 HOMEWORKS_DIR = '.homeworks'
@@ -155,7 +155,8 @@ def get_homeworks(sftp, subject):
 def send_homework(sftp, subject, file_path, name, comments, mimetype):
     remote_path = os.path.join(GROUPS_DIR, GROUP, subject, HOMEWORKS_DIR, name)
     sftp.put(file_path, remote_path)
-    _file = sftp.open(os.path.join(subject, ".desc"))
+    _file = sftp.open(os.path.join(GROUPS_DIR, GROUP, subject, HOMEWORKS_DIR, 
+                      ".desc"))
     desc = json.load(_file)
     _file.close()
 
@@ -168,7 +169,10 @@ def send_homework(sftp, subject, file_path, name, comments, mimetype):
     myname = machines[serial_number][0]
 
     date = str(datetime.date.today()).replace('-', '/')
-    desc[name] = (date, comments, '', myname, mimetype, file_path.split('.')[0])
-    _file = sftp.open(MACHINES, 'w')
-    json.load(desc, _file)
+    extension = '' if not '.' in file_path else file_path.split('.')[-1]
+    desc[name] = (date, comments, '', myname, mimetype, extension)
+    _file = sftp.open(os.path.join(GROUPS_DIR, GROUP, subject, HOMEWORKS_DIR, 
+                      ".desc"), 'w')
+    json.dump(desc, _file)
     _file.close()
+

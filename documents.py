@@ -25,6 +25,7 @@ import gobject
 import widgets
 import utils
 from dialogs import InfoDialog
+from dialogs import InfoDialogHW
 from sugar.graphics import style
 from sugar.graphics.icon import Icon
 from sugar import profile
@@ -174,29 +175,22 @@ class HomeWorks(gtk.EventBox):
         keys = self._hwlist.keys()
         keys.sort()
         for hw in keys:
-            date, comments, evaluation, student, mimetype = self._hwlist[hw]
+            date, comments, evaluation, student, mimetype, extension = self._hwlist[hw]
             evaluation = evaluation.split('|')[0]
-            item = ListItem(hw, mimetype, 'Evaluación: %s' % evaluation)
+            if evaluation:
+                evaluation = 'Evaluación: %s' % evaluation
+            else:
+                evaluation = 'No evaluado'
+            item = ListItem(hw, mimetype, evaluation, False)
             item.connect("show-info", self._show_info)
             self._vbox.pack_start(item, False, True, 5)
             item.show()
-            print hw, self._hwlist[hw]
         self.show_all()
-        self._activity.show_all()
 
     def _show_info(self, widget):
         #TODO: Create a new dialog type
-        return
-#        desc, teacher, mimetype =\
-#          utils.get_info(self._sftp,
-#                         self._subject, widget.title)
-#
-#        dialog = InfoDialog(widget.title, desc, teacher,
-#                            self._subject, mimetype)
-#        dialog.connect('save-document', lambda w: utils.save_document(
-#                self._sftp, self._subject, widget.title, mimetype))
-#
-
+        date, comments, evaluation, student, mimetype, extension = self._hwlist[widget.title]
+        dialog = InfoDialogHW(widget.title, comments, eveluation, student, mimetype)
 
 class ListItem(gtk.HBox):
     __gsignals__ = {"show-info": (gobject.SIGNAL_RUN_FIRST, None, ()),
@@ -224,8 +218,8 @@ class ListItem(gtk.HBox):
             self.pack_start(self._checkbutton, False, True, 5)
         self.pack_start(icon, False, True, 5)
         self.pack_start(label, False, True, 5)
-        self.pack_end(evaluation, False, True, 5)
         self.pack_end(button, False, True, 5)
+        self.pack_end(evaluation, False, True, 5)
         self.title = title
         self.mimetype = mimetype
 

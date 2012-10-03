@@ -152,3 +152,49 @@ class InfoDialog(_DialogWindow):
         bbox.pack_end(btn_save, False)
 
         self.show_all()
+
+
+class InfoDialogHW(_DialogWindow):
+    __gtype_name__ = 'InfoDialogHW'
+
+    def __init__(self, title, comment, evaluetion, student, mimetype):
+        super(InfoDialogHW, self).__init__("info",
+                                            'Informacion del documento')
+
+        hbox = gtk.HBox()
+        self.content_vbox.pack_start(hbox, True)
+
+        previewbox = gtk.VBox()
+        preview = Icon(pixel_size=300)
+        preview.props.icon_name = mime.get_mime_icon(mimetype)
+        preview.props.xo_color = profile.get_color()
+        previewbox.pack_start(preview, False)
+        hbox.pack_start(previewbox, False, padding=5)
+
+        vbox = gtk.VBox()
+        hbox.pack_end(vbox, True, padding=20)
+
+        title_label = gtk.Label(
+            '<span font_desc="15"><b>%s</b></span>' % title)
+        title_label.set_use_markup(True)
+        vbox.pack_start(title_label, False)
+
+        commet_box = gtk.VBox()
+        commet_label = gtk.Label('<i>%s</i>' % comment)
+        commet_label.set_use_markup(True)
+        commet_label.set_line_wrap(True)
+        commet_box.pack_start(commet_label, False, padding=30)
+        vbox.pack_start(commet_box, True)
+
+        box = gtk.HBox()
+        student_label = gtk.Label('%s' % student)
+        box.pack_end(student_label, False)
+        
+        evaluation_t = gtk.Label('%s' % evaluation)
+        box.pack_start(evaluetions_t, False)
+
+        bbox = gtk.HBox()
+        self.content_vbox.pack_end(bbox, False)
+        self.content_vbox.pack_end(box, False)
+
+        self.show_all()

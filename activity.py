@@ -33,6 +33,7 @@ from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.alert import Alert
 from sugar.graphics.objectchooser import ObjectChooser
+from sugar import mime
 
 from subjects import Subjects
 from documents import Documents
@@ -122,6 +123,7 @@ class Explorer(activity.Activity):
         self._hw_title = ''
         self._hw_description = ''
         self._hw_path = ''
+        self._hw_mimetype = ''
 
         self.set_canvas(self._canvas)
         self.show_all()
@@ -153,10 +155,9 @@ class Explorer(activity.Activity):
             self._notebook.set_current_page(-1)
             self._send.set_sensitive(True)
             self._hw_title.set_text(jobject.get_metadata()["title"])
-            self._hw_mime_type = jobject.get_metadata()["mime type"]
+            self._hw_mimetype = mime.get_for_file(self._hw_path)
 
     def _send_hw_to_server(self, widget):
-        #TODO: self._send the homework to the server
         _buffer = self._hw_description.get_buffer()
         start = _buffer.get_start_iter()
         end = _buffer.get_end_iter()
@@ -167,7 +168,7 @@ class Explorer(activity.Activity):
                                            get_active_text(),
                                            self._hw_path,
                                            self._hw_title.get_text(), 
-                                           comments,  self._hw_mime_type)
+                                           comments,  self._hw_mimetype)
 
         self._notebook.set_current_page(2)
 

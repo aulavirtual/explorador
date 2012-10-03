@@ -86,7 +86,7 @@ class SubjectWidget(gtk.EventBox):
 
         self.add(box)
         self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
-        self.set_border_width(10)
+        self.set_border_width(3)
 
         self.show_all()
 
