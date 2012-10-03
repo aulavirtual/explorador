@@ -72,7 +72,12 @@ class SubjectWidget(gtk.EventBox):
     def __init__(self, image, name):
         gtk.EventBox.__init__(self)
 
+        self.add_events(gtk.gdk.BUTTON_PRESS_MASK |
+                        gtk.gdk.ENTER_NOTIFY_MASK |
+                        gtk.gdk.LEAVE_NOTIFY_MASK)
         self.connect("button-press-event", self._clicked)
+        self.connect("enter-notify-event", self._enter_notify)
+        self.connect("leave-notify-event", self._leave_notify)
 
         box = gtk.VBox()
         self.subject_name = name
@@ -82,7 +87,7 @@ class SubjectWidget(gtk.EventBox):
         label = gtk.Label(name)
 
         box.pack_start(icon, True)
-        box.pack_start(label, False)
+        box.pack_start(label, True, True)
 
         self.add(box)
         self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
@@ -92,7 +97,12 @@ class SubjectWidget(gtk.EventBox):
 
     def _clicked(self, widget, event):
         self.emit("clicked", self.subject_name)
-
+        
+    def _enter_notify(self, widget, event):
+        self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
+    
+    def _leave_notify(self, widget, event):
+        self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
 
 if __name__ == "__main__":
     w = gtk.Window()

@@ -190,7 +190,7 @@ class HomeWorks(gtk.EventBox):
     def _show_info(self, widget):
         #TODO: Create a new dialog type
         date, comments, evaluation, student, mimetype, extension = self._hwlist[widget.title]
-        dialog = InfoDialogHW(widget.title, comments, eveluation, student, mimetype)
+        dialog = InfoDialogHW(widget.title, comments, evaluation, student, mimetype)
 
 class ListItem(gtk.HBox):
     __gsignals__ = {"show-info": (gobject.SIGNAL_RUN_FIRST, None, ()),

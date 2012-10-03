@@ -157,7 +157,7 @@ class InfoDialog(_DialogWindow):
 class InfoDialogHW(_DialogWindow):
     __gtype_name__ = 'InfoDialogHW'
 
-    def __init__(self, title, comment, evaluetion, student, mimetype):
+    def __init__(self, title, comment, evaluation, student, mimetype):
         super(InfoDialogHW, self).__init__("info",
                                             'Informacion del documento')
 
@@ -191,7 +191,7 @@ class InfoDialogHW(_DialogWindow):
         box.pack_end(student_label, False)
         
         evaluation_t = gtk.Label('%s' % evaluation)
-        box.pack_start(evaluetions_t, False)
+        box.pack_start(evaluation_t, False)
 
         bbox = gtk.HBox()
         self.content_vbox.pack_end(bbox, False)

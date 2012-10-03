@@ -34,9 +34,9 @@ from sugar.activity import activity
 from sugar.datastore import datastore
 
 MYFILES = os.path.join(activity.get_activity_root(), 'data')
-SERVER = '192.168.1.100'
-USERNAME = 'servidor'
-PASSWORD = 'grupos'
+SERVER = '127.0.0.1'
+USERNAME = 'olpc'
+PASSWORD = 'nada'
 GROUPS_DIR = "/home/servidor/Groups"
 MACHINES = '/home/servidor/serial_numbers.txt'
 LOG = '/home/servidor/log.txt'
