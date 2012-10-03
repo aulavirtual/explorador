@@ -272,6 +272,8 @@ class Explorer(activity.Activity):
     def _go_up_clicked(self, widget):
         self._notebook.set_current_page(0)
         self._goup.set_sensitive(False)
+        self._select_all.set_sensitive(False)
+        self._download.set_sensitive(False)
 
     def _select_all_clicked(self, widget):
         self._documents.select_all()
@@ -282,7 +284,8 @@ class Explorer(activity.Activity):
         self._documents = Documents(self)
 
         self._notebook = gtk.Notebook()
-        self._subjects = Subjects(self._notebook, self._documents)
+        self._subjects = Subjects(self._notebook, self._documents, 
+                                  self._go_up_clicked)
         self._subjects.connect('selected',
                                lambda w: self._goup.set_sensitive(True))
         scroll_documents.add_with_viewport(self._documents)

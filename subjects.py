@@ -29,7 +29,7 @@ import utils
 class Subjects(gtk.Table):
     __gsignals__ = {"selected": (gobject.SIGNAL_RUN_FIRST, None, [])}
 
-    def __init__(self, notebook, documents):
+    def __init__(self, notebook, documents, go_up):
         gtk.Table.__init__(self, columns=4)
         self.set_homogeneous(True)
 
@@ -53,6 +53,9 @@ class Subjects(gtk.Table):
                     column = 0
 
                 self.attach(sw, column, column + 1, row, row + 1)
+                
+        gobject.idle_add(self._button_clicked, None, listdir[0])
+        gobject.idle_add(go_up, None)
 
     def _connect(self):
         sftp = utils.connect_to_server()
