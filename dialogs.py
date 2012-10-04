@@ -190,7 +190,12 @@ class InfoDialogHW(_DialogWindow):
         student_label = gtk.Label('%s' % student)
         box.pack_end(student_label, False)
         
+        evaluation = evaluation.split('|')
+        evaluation = '<b>%s</b>\n%s' % (evaluation[0], evaluation[1])
         evaluation_t = gtk.Label('%s' % evaluation)
+        evaluation_t.set_use_markup(True)
+        evaluation_t.set_line_wrap_mode(gtk.WRAP_WORD)
+        evaluation_t.set_line_wrap(True)
         box.pack_start(evaluation_t, False)
 
         bbox = gtk.HBox()

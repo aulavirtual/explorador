@@ -34,9 +34,9 @@ from sugar.activity import activity
 from sugar.datastore import datastore
 
 MYFILES = os.path.join(activity.get_activity_root(), 'data')
-SERVER = '127.0.0.1'
-USERNAME = 'olpc'
-PASSWORD = 'nada'
+SERVER = '192.168.1.2'
+USERNAME = 'servidor'
+PASSWORD = 'grupos'
 GROUPS_DIR = "/home/servidor/Groups"
 MACHINES = '/home/servidor/serial_numbers.txt'
 LOG = '/home/servidor/log.txt'
@@ -145,12 +145,20 @@ def get_homeworks(sftp, subject):
     _desc = sftp.open('.desc', 'r')
     desc = json.load(_desc)
     _desc.close()
+    _file = sftp.open(MACHINES, 'r')
+    machines = json.load(_file)
+    _file.close()
+    _file = open(SERIAL_NUM)
+    serial_number = _file.read()[:-1]
+    myname = machines[serial_number][0]
+    _file.close()
+    
     homeworks = {}
     for hw in sftp.listdir('.'):
         if not hw.startswith('.'):
-            homeworks[hw] = desc[hw]
+            if desc[hw][3] == myname:
+                homeworks[hw] = desc[hw]
     return homeworks
-
 
 def send_homework(sftp, subject, file_path, name, comments, mimetype):
     remote_path = os.path.join(GROUPS_DIR, GROUP, subject, HOMEWORKS_DIR, name)
