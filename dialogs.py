@@ -107,6 +107,7 @@ class _DialogToolbar(gtk.Toolbar):
 
 
 class InfoDialog(_DialogWindow):
+    '''Crea un dialogo para la informacion de un documento '''
     __gtype_name__ = 'InfoDialog'
     __gsignals__ = {"save-document": (gobject.SIGNAL_RUN_FIRST, None, ())}
 
@@ -155,6 +156,7 @@ class InfoDialog(_DialogWindow):
 
 
 class InfoDialogHW(_DialogWindow):
+    '''Crea un dialog con la informacion de las tareas domicialiarias'''
     __gtype_name__ = 'InfoDialogHW'
 
     def __init__(self, title, comment, evaluation, student, mimetype):
