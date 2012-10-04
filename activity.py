@@ -42,7 +42,7 @@ GROUPS = ('1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B')
 
 
 class Explorer(activity.Activity):
-
+    '''Es la clase que crea la actividad'''
     def __init__(self, handle):
         activity.Activity.__init__(self, handle, True)
 
@@ -133,6 +133,8 @@ class Explorer(activity.Activity):
             self._do_canvas()
 
     def homework_btn_cb(self, button, open_btn):
+        '''Se ejecuta cuando se hace click en el boton
+        de tareas domiciliarias, se encarga de cambiar de pagina'''
         self._notebook.set_current_page(2)
         self._goup.set_sensitive(False)
         self._select_all.set_sensitive(False)
@@ -141,11 +143,14 @@ class Explorer(activity.Activity):
         self._send.set_sensitive(False)
 
     def explorer_btn_cb(self, widget, open_btn):
+        '''Se ejecuta cuando se hace click en el boton
+        del explorador, se encarga de cambiar de pagina'''
         self._notebook.set_current_page(0)
         open_btn.set_sensitive(False)
         self._send.set_sensitive(False)
 
     def _select_hw_from_journal(self, widget):
+        '''Abre un selector de objetos del diario'''
         chooser = ObjectChooser()
         response = chooser.run()
 
@@ -158,6 +163,7 @@ class Explorer(activity.Activity):
             self._hw_mimetype = mime.get_for_file(self._hw_path)
 
     def _send_hw_to_server(self, widget):
+        '''Envia las tareas domiciliarias'''
         _buffer = self._hw_description.get_buffer()
         start = _buffer.get_start_iter()
         end = _buffer.get_end_iter()
@@ -179,6 +185,7 @@ class Explorer(activity.Activity):
             self._last_name = widget.get_text()
 
     def _do_homework_canvas(self):
+        '''Arma el canvas para la tareas domiciliarias '''
         main_container = gtk.VBox()
 
         self._hw_title = widgets.Entry('Escriba el titulo aqui')
@@ -199,6 +206,7 @@ class Explorer(activity.Activity):
         return main_container
 
     def choose_group(self):
+        '''Selector de los grupos'''
         vbox = gtk.VBox()
         vbox.set_border_width(20)
 
@@ -261,6 +269,8 @@ class Explorer(activity.Activity):
         self.show_all()
 
     def _accept_clicked(self, widget, combo, entry, vbox):
+        '''Se encarga de guardar la informacion de 
+        la maquina en el sevidor'''
         group = GROUPS[combo.get_active()]
         utils.GROUP = group
         vbox.destroy()
@@ -270,15 +280,18 @@ class Explorer(activity.Activity):
                       '%s %s' % (self._name, self._last_name))
 
     def _go_up_clicked(self, widget):
+        '''Mustra la lista de materias'''
         self._notebook.set_current_page(0)
         self._goup.set_sensitive(False)
         self._select_all.set_sensitive(False)
         self._download.set_sensitive(False)
 
     def _select_all_clicked(self, widget):
+        '''Selecciona todo'''
         self._documents.select_all()
 
     def _do_canvas(self):
+        '''Crea el canvas principal'''
         scroll_documents = gtk.ScrolledWindow()
         scroll_documents.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self._documents = Documents(self)
@@ -306,6 +319,7 @@ class Explorer(activity.Activity):
         self._notebook.set_current_page(0)
 
     def get_alert(self):
+        '''Devuelve la alerta'''
         if not self._one_alert:
             self._one_alert = Alert()
             self.add_alert(self._one_alert)
