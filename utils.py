@@ -34,7 +34,7 @@ from sugar.activity import activity
 from sugar.datastore import datastore
 
 MYFILES = os.path.join(activity.get_activity_root(), 'data')
-SERVER = '192.168.1.2'
+SERVER = '192.168.1.100'
 USERNAME = 'servidor'
 PASSWORD = 'grupos'
 GROUPS_DIR = "/home/servidor/Groups"
